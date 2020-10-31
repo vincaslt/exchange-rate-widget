@@ -11,7 +11,10 @@ export default function Home() {
 
       <main>
         <div className="flex h-screen bg-gradient-to-b from-blue-50 to-blue-100">
-          <ExchangeWidget className="w-96 h-96 m-auto rounded-lg shadow-lg" />
+          <ExchangeWidget
+            rounded
+            className="w-full h-full sm:w-96 sm:h-96 m-auto shadow-lg"
+          />
         </div>
       </main>
     </div>
