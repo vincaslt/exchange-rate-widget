@@ -1,6 +1,6 @@
-import { Listbox, Transition } from '@headlessui/react';
-import { Refresh, TrendingUp } from 'heroicons-react';
 import React, { useState } from 'react';
+import { Currency } from '../../constants';
+import RatesContainer from '../../containers/RatesContainer';
 import { classNames } from '../../utils/classNames';
 import PocketDropdown, { Pocket } from '../ui/PocketDropdown';
 import ExchangeRate from './ExchangeRate';
@@ -29,8 +29,12 @@ const pockets: Pocket[] = [
   },
 ];
 
+// TODO: server-side render rates
 export default function ExchangeWidget({ className, rounded }: Props) {
+  const { rates } = RatesContainer.useContainer();
   const [activePocket, setActivePocket] = useState('eur');
+
+  console.log({ rates });
 
   return (
     <div
@@ -49,7 +53,7 @@ export default function ExchangeWidget({ className, rounded }: Props) {
           />
         </div>
         <input
-          type="text"
+          type="number"
           value="0"
           className="flex w-full text-right text-xl h-20 bg-transparent outline-none text-gray-400"
         />
@@ -62,7 +66,13 @@ export default function ExchangeWidget({ className, rounded }: Props) {
       >
         <div className="px-3 w-full flex items-center justify-between absolute top-0 transform -translate-y-1/2">
           <SwitchButton />
-          <ExchangeRate />
+          {rates && (
+            <ExchangeRate
+              base={rates.base}
+              rate={rates.rates[Currency.USD]}
+              target={Currency.USD}
+            />
+          )}
         </div>
         <div className="flex flex-grow px-3 pt-6">
           <div className="flex flex-shrink-0">
@@ -73,8 +83,7 @@ export default function ExchangeWidget({ className, rounded }: Props) {
             />
           </div>
           <input
-            type="text"
-            value="0"
+            type="number"
             className="flex w-full text-right text-xl h-20 bg-transparent outline-none text-gray-400"
           />
         </div>
