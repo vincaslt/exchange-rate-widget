@@ -1,6 +1,6 @@
 import { Currency } from '../constants';
 
-export interface RatesDataDTO {
+export interface RatesData {
   date: string;
   base: Currency;
   rates: {
@@ -8,13 +8,8 @@ export interface RatesDataDTO {
   };
 }
 
-export interface RatesData extends Omit<RatesDataDTO, 'date'> {
-  date: Date;
-}
-
-export function fromRatesDataDTO(dto: RatesDataDTO) {
-  return {
-    ...dto,
-    date: new Date(dto.date),
-  };
-}
+export type Rates = Partial<
+  {
+    [currency in Currency]: RatesData;
+  }
+>;

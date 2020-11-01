@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Currency } from '../../constants';
+import PocketsContainer from '../../containers/PocketsContainer';
 import RatesContainer from '../../containers/RatesContainer';
 import { classNames } from '../../utils/classNames';
-import PocketDropdown, { Pocket } from '../ui/PocketDropdown';
+import PocketDropdown from '../ui/PocketDropdown';
 import ExchangeRate from './ExchangeRate';
 import SwitchButton from './SwitchButton';
 
@@ -11,30 +12,19 @@ interface Props {
   className?: string;
 }
 
-const pockets: Pocket[] = [
-  {
-    id: 'eur',
-    balance: 100,
-    name: 'EUR',
-  },
-  {
-    id: 'usd',
-    balance: 50,
-    name: 'USD',
-  },
-  {
-    id: 'gbp',
-    balance: 25,
-    name: 'GBP',
-  },
-];
-
-// TODO: server-side render rates
 export default function ExchangeWidget({ className, rounded }: Props) {
-  const { rates } = RatesContainer.useContainer();
-  const [activePocket, setActivePocket] = useState('eur');
+  const {
+    baseCurrencyRates,
+    baseCurrency,
+    setBaseCurrency,
+  } = RatesContainer.useContainer();
+  const { pockets } = PocketsContainer.useContainer();
+  const [targetCurrency, setTargetCurrency] = useState(Currency.GBP);
 
-  console.log({ rates });
+  const handleSwitchPocket = () => {
+    setTargetCurrency(baseCurrency);
+    setBaseCurrency(targetCurrency);
+  };
 
   return (
     <div
@@ -48,8 +38,8 @@ export default function ExchangeWidget({ className, rounded }: Props) {
         <div className="flex flex-shrink-0">
           <PocketDropdown
             pockets={pockets}
-            selected={activePocket}
-            onChange={setActivePocket}
+            selected={baseCurrency}
+            onChange={setBaseCurrency}
           />
         </div>
         <input
@@ -65,21 +55,19 @@ export default function ExchangeWidget({ className, rounded }: Props) {
         )}
       >
         <div className="px-3 w-full flex items-center justify-between absolute top-0 transform -translate-y-1/2">
-          <SwitchButton />
-          {rates && (
-            <ExchangeRate
-              base={rates.base}
-              rate={rates.rates[Currency.USD]}
-              target={Currency.USD}
-            />
-          )}
+          <SwitchButton onClick={handleSwitchPocket} />
+          <ExchangeRate
+            base={baseCurrencyRates.base}
+            rate={baseCurrencyRates.rates[targetCurrency]}
+            target={targetCurrency}
+          />
         </div>
         <div className="flex flex-grow px-3 pt-6">
           <div className="flex flex-shrink-0">
             <PocketDropdown
               pockets={pockets}
-              selected={activePocket}
-              onChange={setActivePocket}
+              selected={targetCurrency}
+              onChange={setTargetCurrency}
             />
           </div>
           <input

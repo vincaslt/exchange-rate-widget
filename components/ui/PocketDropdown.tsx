@@ -2,21 +2,19 @@ import React from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { Check, ChevronDown } from 'heroicons-react';
 import { classNames } from '../../utils/classNames';
-
-export interface Pocket {
-  id: string;
-  name: string;
-  balance: number;
-}
+import { Pockets } from '../../interfaces/pockets';
+import { Currency } from '../../constants';
+import { formatCurrency } from '../../utils/currency';
 
 interface Props {
-  selected: string;
-  pockets: Pocket[];
-  onChange: (pocketId: string) => void;
+  selected: Currency;
+  pockets: Pockets;
+  onChange: (currency: Currency) => void;
 }
 
-export default function Dropdown({ pockets, selected, onChange }: Props) {
-  const activePocket = pockets.find((pocket) => pocket.id === selected);
+// TODO: fix doropdown focus issues
+export default function PocketDropdown({ pockets, selected, onChange }: Props) {
+  const activePocket = pockets[selected];
 
   return (
     <span className="inline-block">
@@ -25,13 +23,14 @@ export default function Dropdown({ pockets, selected, onChange }: Props) {
           <div className="relative">
             <Listbox.Button className="flex flex-col relative w-full rounded-lg px-3 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150">
               <span className="relative flex font-medium text-xl leading-8">
-                {activePocket.name}
+                {activePocket.currency}
                 <span className="inset-y-0 right-0 flex items-center pr-2">
                   <ChevronDown className="h-4 w-4" />
                 </span>
               </span>
               <span className="text-gray-400 sm:text-xs sm:leading-4">
-                Remaining: {activePocket.balance}
+                Remaining:{' '}
+                {formatCurrency(activePocket.balance, activePocket.currency)}
               </span>
             </Listbox.Button>
             <Transition
@@ -45,8 +44,8 @@ export default function Dropdown({ pockets, selected, onChange }: Props) {
                 static
                 className="max-h-60 rounded-lg py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5"
               >
-                {pockets.map((pocket) => (
-                  <Listbox.Option key={pocket.id} value={pocket.id}>
+                {Object.values(pockets).map((pocket) => (
+                  <Listbox.Option key={pocket.currency} value={pocket.currency}>
                     {({ active, selected }) => (
                       <div
                         className={classNames(
@@ -60,13 +59,13 @@ export default function Dropdown({ pockets, selected, onChange }: Props) {
                             selected ? 'font-medium' : 'font-normal'
                           )}
                         >
-                          <span>{pocket.name}</span>
+                          <span>{pocket.currency}</span>
                           <span
                             className={
                               active ? 'text-blue-200' : 'text-gray-500'
                             }
                           >
-                            {pocket.balance}
+                            {formatCurrency(pocket.balance, pocket.currency)}
                           </span>
                         </div>
                         {selected && (

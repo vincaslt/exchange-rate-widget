@@ -1,12 +1,8 @@
 import { useCallback, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { Currency } from '../constants';
-import { Pocket } from '../interfaces/pockets';
+import { Pockets } from '../interfaces/pockets';
 import RatesContainer from './RatesContainer';
-
-type Pockets = {
-  [currency in Currency]: Pocket;
-};
 
 function usePockets(initialState: { pockets: Pockets }) {
   const { getRatesForCurrency } = RatesContainer.useContainer();

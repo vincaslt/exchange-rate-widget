@@ -4,3 +4,7 @@ export interface Pocket {
   currency: Currency;
   balance: number;
 }
+
+export type Pockets = {
+  [currency in Currency]: Pocket;
+};

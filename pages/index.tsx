@@ -1,10 +1,15 @@
 import Head from 'next/head';
+import { fetchRatesData } from '../api/rates';
 import ExchangeWidget from '../components/ExchangeWidget/ExchangeWidget';
 import { Currency } from '../constants';
 import PocketsContainer from '../containers/PocketsContainer';
-import RatesContainer from '../containers/RatesContainer';
+import RatesContainer, { InitialRatesData } from '../containers/RatesContainer';
 
-export default function Home() {
+interface Props {
+  initialData: InitialRatesData;
+}
+
+export default function Home({ initialData }: Props) {
   return (
     <div>
       <Head>
@@ -14,9 +19,7 @@ export default function Home() {
 
       <main>
         <div className="flex h-screen bg-gradient-to-b from-blue-50 to-blue-100">
-          <RatesContainer.Provider
-            initialState={{ baseCurrency: Currency.EUR }}
-          >
+          <RatesContainer.Provider initialState={initialData}>
             <PocketsContainer.Provider
               initialState={{
                 pockets: {
@@ -36,4 +39,20 @@ export default function Home() {
       </main>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const initialData = {
+    allRates: {
+      [Currency.EUR]: await fetchRatesData(Currency.EUR),
+      [Currency.USD]: await fetchRatesData(Currency.USD),
+      [Currency.GBP]: await fetchRatesData(Currency.GBP),
+    },
+    baseCurrency: Currency.EUR,
+  };
+  return {
+    props: {
+      initialData,
+    },
+  };
 }
