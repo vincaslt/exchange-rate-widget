@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "cypress open"
   },
   "dependencies": {
     "@headlessui/react": "^0.2.0",
@@ -26,6 +27,7 @@
     "@typescript-eslint/parser": "^4.0.0",
     "autoprefixer": "9.8.6",
     "babel-eslint": "^10.0.0",
+    "cypress": "^5.5.0",
     "eslint": "^7.5.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.2.0",

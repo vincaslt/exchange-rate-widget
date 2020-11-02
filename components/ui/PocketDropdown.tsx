@@ -26,7 +26,10 @@ export default function PocketDropdown({
       <Listbox value={selected} onChange={onChange}>
         {({ open }) => (
           <div className="relative">
-            <Listbox.Button className="flex flex-col relative w-full rounded-lg px-3 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150">
+            <Listbox.Button
+              data-test-id="button-pocket-dropdown"
+              className="flex flex-col relative w-full rounded-lg px-3 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150"
+            >
               <span className="relative flex font-medium text-xl leading-8">
                 {activePocket.currency}
                 <span className="inset-y-0 right-0 flex items-center pr-2">
@@ -40,7 +43,13 @@ export default function PocketDropdown({
                 )}
               >
                 Remaining:{' '}
-                {formatCurrency(activePocket.balance, activePocket.currency)}
+                <span data-test-id="pocket-balance">
+                  {formatCurrency(
+                    activePocket.balance,
+                    activePocket.currency,
+                    true
+                  )}
+                </span>
               </span>
             </Listbox.Button>
             <Transition
@@ -75,7 +84,11 @@ export default function PocketDropdown({
                               active ? 'text-blue-200' : 'text-gray-500'
                             }
                           >
-                            {formatCurrency(pocket.balance, pocket.currency)}
+                            {formatCurrency(
+                              pocket.balance,
+                              pocket.currency,
+                              true
+                            )}
                           </span>
                         </div>
                         {selected && (

@@ -208,7 +208,11 @@ export default function ExchangeWidget({ className, rounded }: Props) {
           />
         </div>
 
-        <Button type="submit" disabled={isInsufficient}>
+        <Button
+          type="submit"
+          disabled={isInsufficient}
+          data-test-id="button-exchange"
+        >
           Exchange
         </Button>
       </div>
