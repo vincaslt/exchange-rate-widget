@@ -4,10 +4,10 @@ import { Currency } from '../constants';
 import { Pockets } from '../interfaces/pockets';
 import RatesContainer from './RatesContainer';
 
-function usePockets(initialState?: { pockets: Pockets }) {
+function usePockets(initialState?: Pockets) {
   const { getRatesForCurrency } = RatesContainer.useContainer();
   const [pockets, setPockets] = useState(
-    initialState?.pockets ?? {
+    initialState ?? {
       [Currency.EUR]: { balance: 0, currency: Currency.EUR },
       [Currency.USD]: { balance: 0, currency: Currency.USD },
       [Currency.GBP]: { balance: 0, currency: Currency.GBP },

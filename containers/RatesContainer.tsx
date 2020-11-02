@@ -1,25 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { fetchRatesData } from '../api/rates';
 import { Currency } from '../constants';
 import { Rates } from '../interfaces/rates';
 
-export interface InitialRatesData {
-  allRates: Rates;
-  baseCurrency: Currency;
-}
-
-// TODO: query after switch immediately
-function useRates(initialState?: InitialRatesData) {
-  const [allRates, setAllRates] = useState<Rates>(initialState?.allRates ?? {});
-  // const [baseCurrency, setBaseCurrency] = useState(
-  //   initialState?.baseCurrency ?? Currency.EUR
-  // );
-
-  // const baseCurrencyRates = useMemo(() => allRates[baseCurrency], [
-  //   baseCurrency,
-  //   allRates,
-  // ]);
+function useRates(initialState?: Rates) {
+  const [allRates, setAllRates] = useState<Rates>(initialState ?? {});
 
   const fetchExchangeRates = useCallback(async (currency: Currency) => {
     const exchangeRates = await fetchRatesData(currency);
@@ -36,22 +22,7 @@ function useRates(initialState?: InitialRatesData) {
     [allRates, fetchExchangeRates]
   );
 
-  // useEffect(() => {
-  //   if (baseCurrencyRates) {
-  //     const interval = setInterval(
-  //       () => fetchExchangeRates(baseCurrency),
-  //       10000
-  //     );
-  //     return () => clearInterval(interval);
-  //   }
-
-  //   fetchExchangeRates(baseCurrency);
-  // }, [baseCurrency, baseCurrencyRates, fetchExchangeRates]);
-
   return {
-    // baseCurrency,
-    // setBaseCurrency,
-    // baseCurrencyRates,
     allRates,
     getRatesForCurrency,
     fetchExchangeRates,

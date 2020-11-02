@@ -3,10 +3,15 @@ import { fetchRatesData } from '../api/rates';
 import ExchangeWidget from '../components/ExchangeWidget/ExchangeWidget';
 import { Currency } from '../constants';
 import PocketsContainer from '../containers/PocketsContainer';
-import RatesContainer, { InitialRatesData } from '../containers/RatesContainer';
+import RatesContainer from '../containers/RatesContainer';
+import { Pockets } from '../interfaces/pockets';
+import { Rates } from '../interfaces/rates';
 
 interface Props {
-  initialData: InitialRatesData;
+  initialData: {
+    rates: Rates;
+    pockets: Pockets;
+  };
 }
 
 export default function Home({ initialData }: Props) {
@@ -19,16 +24,8 @@ export default function Home({ initialData }: Props) {
 
       <main>
         <div className="flex h-screen bg-gradient-to-b from-blue-50 to-blue-100">
-          <RatesContainer.Provider initialState={initialData}>
-            <PocketsContainer.Provider
-              initialState={{
-                pockets: {
-                  [Currency.EUR]: { balance: 100, currency: Currency.EUR },
-                  [Currency.USD]: { balance: 50, currency: Currency.USD },
-                  [Currency.GBP]: { balance: 25, currency: Currency.GBP },
-                },
-              }}
-            >
+          <RatesContainer.Provider initialState={initialData.rates}>
+            <PocketsContainer.Provider initialState={initialData.pockets}>
               <ExchangeWidget
                 rounded
                 className="w-full h-full sm:w-96 sm:h-96 m-auto shadow-lg"
@@ -43,12 +40,16 @@ export default function Home({ initialData }: Props) {
 
 export async function getServerSideProps() {
   const initialData = {
-    allRates: {
+    rates: {
       [Currency.EUR]: await fetchRatesData(Currency.EUR),
       [Currency.USD]: await fetchRatesData(Currency.USD),
       [Currency.GBP]: await fetchRatesData(Currency.GBP),
     },
-    baseCurrency: Currency.EUR,
+    pockets: {
+      [Currency.EUR]: { balance: 100, currency: Currency.EUR },
+      [Currency.USD]: { balance: 50, currency: Currency.USD },
+      [Currency.GBP]: { balance: 25, currency: Currency.GBP },
+    },
   };
   return {
     props: {

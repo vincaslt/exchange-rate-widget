@@ -6,7 +6,7 @@ import { classNames } from '../../utils/classNames';
 import useInterval from '../../utils/useInterval';
 import AmountInput from '../ui/AmountInput';
 import Button from '../ui/Button';
-import PocketDropdown from '../ui/PocketDropdown';
+import PocketDropdown from '../ui/PocketDropdown/PocketDropdown';
 import ExchangeRate from './ExchangeRate';
 import SwitchButton from './SwitchButton';
 
