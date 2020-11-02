@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { fetchRatesData } from '../api/rates';
-import ExchangeWidget from '../components/ExchangeWidget/ExchangeWidget';
+import ExchangeWidget from '../components/ExchangeWidget';
 import { Currency } from '../constants';
 import PocketsContainer from '../containers/PocketsContainer';
 import RatesContainer from '../containers/RatesContainer';
