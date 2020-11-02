@@ -10,14 +10,16 @@ export interface InitialRatesData {
 }
 
 // TODO: query after switch immediately
-function useRates(initialState: InitialRatesData) {
-  const [allRates, setAllRates] = useState<Rates>(initialState.allRates);
-  const [baseCurrency, setBaseCurrency] = useState(initialState.baseCurrency);
+function useRates(initialState?: InitialRatesData) {
+  const [allRates, setAllRates] = useState<Rates>(initialState?.allRates ?? {});
+  // const [baseCurrency, setBaseCurrency] = useState(
+  //   initialState?.baseCurrency ?? Currency.EUR
+  // );
 
-  const baseCurrencyRates = useMemo(() => allRates[baseCurrency], [
-    baseCurrency,
-    allRates,
-  ]);
+  // const baseCurrencyRates = useMemo(() => allRates[baseCurrency], [
+  //   baseCurrency,
+  //   allRates,
+  // ]);
 
   const fetchExchangeRates = useCallback(async (currency: Currency) => {
     const exchangeRates = await fetchRatesData(currency);
@@ -34,23 +36,25 @@ function useRates(initialState: InitialRatesData) {
     [allRates, fetchExchangeRates]
   );
 
-  useEffect(() => {
-    if (baseCurrencyRates) {
-      const interval = setInterval(
-        () => fetchExchangeRates(baseCurrency),
-        10000
-      );
-      return () => clearInterval(interval);
-    }
+  // useEffect(() => {
+  //   if (baseCurrencyRates) {
+  //     const interval = setInterval(
+  //       () => fetchExchangeRates(baseCurrency),
+  //       10000
+  //     );
+  //     return () => clearInterval(interval);
+  //   }
 
-    fetchExchangeRates(baseCurrency);
-  }, [baseCurrency, baseCurrencyRates, fetchExchangeRates]);
+  //   fetchExchangeRates(baseCurrency);
+  // }, [baseCurrency, baseCurrencyRates, fetchExchangeRates]);
 
   return {
-    baseCurrency,
-    setBaseCurrency,
-    baseCurrencyRates,
+    // baseCurrency,
+    // setBaseCurrency,
+    // baseCurrencyRates,
+    allRates,
     getRatesForCurrency,
+    fetchExchangeRates,
   };
 }
 

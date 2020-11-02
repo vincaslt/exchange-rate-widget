@@ -4,11 +4,16 @@ import { Currency } from '../constants';
 import { Pockets } from '../interfaces/pockets';
 import RatesContainer from './RatesContainer';
 
-function usePockets(initialState: { pockets: Pockets }) {
+function usePockets(initialState?: { pockets: Pockets }) {
   const { getRatesForCurrency } = RatesContainer.useContainer();
-  const [pockets, setPockets] = useState(initialState.pockets);
+  const [pockets, setPockets] = useState(
+    initialState?.pockets ?? {
+      [Currency.EUR]: { balance: 0, currency: Currency.EUR },
+      [Currency.USD]: { balance: 0, currency: Currency.USD },
+      [Currency.GBP]: { balance: 0, currency: Currency.GBP },
+    }
+  );
 
-  // TODO: validate balance
   const exchange = useCallback(
     async (from: Currency, to: Currency, amount: number) => {
       const { rates } = await getRatesForCurrency(from);

@@ -15,6 +15,7 @@
     "next": "10.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-number-format": "^4.4.1",
     "unstated-next": "^1.1.0"
   },
   "devDependencies": {

@@ -10,10 +10,15 @@ interface Props {
   selected: Currency;
   pockets: Pockets;
   onChange: (currency: Currency) => void;
+  insufficient?: boolean;
 }
 
-// TODO: fix doropdown focus issues
-export default function PocketDropdown({ pockets, selected, onChange }: Props) {
+export default function PocketDropdown({
+  pockets,
+  selected,
+  onChange,
+  insufficient,
+}: Props) {
   const activePocket = pockets[selected];
 
   return (
@@ -28,7 +33,12 @@ export default function PocketDropdown({ pockets, selected, onChange }: Props) {
                   <ChevronDown className="h-4 w-4" />
                 </span>
               </span>
-              <span className="text-gray-400 sm:text-xs sm:leading-4">
+              <span
+                className={classNames(
+                  'sm:text-xs sm:leading-4 transition duration-150',
+                  insufficient ? 'text-red-500' : 'text-gray-400'
+                )}
+              >
                 Remaining:{' '}
                 {formatCurrency(activePocket.balance, activePocket.currency)}
               </span>
